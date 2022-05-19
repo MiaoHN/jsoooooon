@@ -1,8 +1,8 @@
 # Jsoooooon
 
-一个低效的 json 解析器
+一个~~低效的~~ json 解析器
 
-## json 数据结构
+## json 文件结构
 
 ```
 json       -> { Whitespace objects Whitespace }
@@ -18,9 +18,9 @@ Whitespace -> Whitespace whitespace | whitespace
 whitespace -> ' ' | '\t' | '\n'
 ```
 
-## 错误处理
-
 ## 示例代码
+
+测试的 json 文件：
 
 ```json
 {
@@ -46,6 +46,35 @@ whitespace -> ' ' | '\t' | '\n'
   "result": 1
 }
 ```
+
+代码：
+
+```cpp
+#include <iostream>
+
+#include "json.h"
+
+int main(int argc, char** argv) {
+  Jsoooooon::Parser parser;
+  Jsoooooon::Json   json = parser.ParseFromFile(filepath);
+
+  std::cout << "result: " << json["result"].ToString() << std::endl;
+  return 0;
+}
+```
+
+输出：
+
+```bash
+result: 1.000000
+```
+
+## TODO
+
+- [ ] 完善对数字的判断
+- [ ] string 中对特殊编码的支持
+- [ ] json 输出格式化
+- [ ] 通过类似于 map 的操作方式对 json 进行处理
 
 ## 参考
 
