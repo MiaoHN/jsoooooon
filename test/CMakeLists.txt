@@ -1,0 +1,6 @@
+include_directories(${PROJECT_SOURCE_DIR}/include)
+link_directories(${PROJECT_SOURCE_DIR}/lib)
+add_executable(json_test json_test.cpp)
+target_link_libraries(json_test PUBLIC jsoooooon)
+add_executable(parser_test parser_test.cpp)
+target_link_libraries(parser_test PUBLIC jsoooooon)
