@@ -40,6 +40,10 @@ class Value {
   void SetJson(Json& json);
   void SetJson(std::shared_ptr<Json> json);
 
+  Value& operator=(double number);
+  Value& operator=(int number);
+  Value& operator=(const std::string& str);
+
   double& GetNumber();
   bool& GetBool();
   std::string& GetString();

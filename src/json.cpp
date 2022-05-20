@@ -10,8 +10,12 @@ Value& Json::operator[](const std::string& key) {
   if (iter != _map.end()) {
     return iter->second;
   }
-  std::cout << "no such key: " << key << std::endl;
-  exit(-1);
+  // 添加一个 key: value 对
+  Value value;
+  value.SetNull();
+  AddNode(key, value);
+  iter = _map.find(key);
+  return iter->second;
 }
 
 std::string Json::ToString() const {

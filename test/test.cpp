@@ -15,8 +15,22 @@ TEST(Json, number) {
   value.SetJson(json2);
   json.AddNode("subjson", value);
   EXPECT_EQ(json["num"].GetNumber(), 111);
-  EXPECT_STREQ(json["str"].ToString().c_str(), "\"Hello World\"");
+  EXPECT_STREQ(json["str"].GetString().c_str(), "Hello World");
   EXPECT_EQ(json["subjson"]["bool"].GetBool(), false);
+}
+
+TEST(Json, add) {
+  Jsoooooon::Json json;
+  json["number"] = 2;
+  json["string"] = "string";
+  json["temp"] = 4;
+  EXPECT_EQ(json["number"].GetNumber(), 2);
+  EXPECT_STREQ(json["string"].GetString().c_str(), "string");
+  EXPECT_EQ(json["temp"].GetNumber(), 4);
+  json["temp"] = "temp";
+  EXPECT_STREQ(json["temp"].GetString().c_str(), "temp");
+  json["bool"].SetBool(false);
+  EXPECT_EQ(json["bool"].GetBool(), false);
 }
 
 TEST(Parse, parseNumber) {

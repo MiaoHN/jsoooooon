@@ -62,6 +62,18 @@ std::shared_ptr<Json> Value::GetJson() {
   return _json_node;
 }
 
+Value& Value::operator=(double number) {
+  SetNumber(number);
+  return *this;
+}
+
+Value& Value::operator=(int number) { return this->operator=((double)number); }
+
+Value& Value::operator=(const std::string& str) {
+  SetString(str);
+  return *this;
+}
+
 std::string Value::ToString() const {
   switch (GetType()) {
     case J_NUMBER:
