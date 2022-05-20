@@ -1,0 +1,12 @@
+{
+  "list": [
+    1,
+    "item1",
+    null,
+    true,
+    {
+      "str": "string"
+    },
+    ["temp"]
+  ]
+}

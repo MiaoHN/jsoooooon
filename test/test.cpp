@@ -2,7 +2,7 @@
 
 #include "jsoooooon.h"
 
-TEST(Json, number) {
+TEST(Json, Basic) {
   Jsoooooon::Json json;
   Jsoooooon::Value value;
   value.SetNumber(111);
@@ -19,7 +19,7 @@ TEST(Json, number) {
   EXPECT_EQ(json["subjson"]["bool"].GetBool(), false);
 }
 
-TEST(Json, add) {
+TEST(Json, Morden) {
   Jsoooooon::Json json;
   json["number"] = 2;
   json["string"] = "string";
@@ -33,7 +33,7 @@ TEST(Json, add) {
   EXPECT_EQ(json["bool"].GetBool(), false);
 }
 
-TEST(Parse, parseNumber) {
+TEST(Parse, Number) {
   Jsoooooon::Parser parser;
   Jsoooooon::Json json = parser.ParseFromFile(
       "/home/miaohn/codes/jsoooooon/test/json/number.json");
@@ -44,7 +44,7 @@ TEST(Parse, parseNumber) {
   EXPECT_EQ(json["num5"].GetNumber(), -3.57e-2);
 }
 
-TEST(Parse, parseValue) {
+TEST(Parse, ValueType) {
   Jsoooooon::Parser parser;
   Jsoooooon::Json json =
       parser.ParseFromFile("/home/miaohn/codes/jsoooooon/test/json/value.json");
@@ -53,9 +53,22 @@ TEST(Parse, parseValue) {
   EXPECT_EQ(json["null"].GetType(), Jsoooooon::J_NULL);
   EXPECT_EQ(json["bool"].GetType(), Jsoooooon::J_BOOL);
   EXPECT_EQ(json["list"].GetType(), Jsoooooon::J_LIST);
-  for (auto &item : json["list"].GetList()) {
+  for (auto& item : json["list"].GetList()) {
     EXPECT_EQ(item.GetType(), Jsoooooon::J_STRING);
   }
   EXPECT_EQ(json["object"].GetType(), Jsoooooon::J_OBJECT);
   EXPECT_EQ(json["object"]["object.string"].GetType(), Jsoooooon::J_STRING);
+}
+
+TEST(Parse, List) {
+  Jsoooooon::Parser parser;
+  Jsoooooon::Json json =
+      parser.ParseFromFile("/home/miaohn/codes/jsoooooon/test/json/list.json");
+  auto vec = json["list"].GetList();
+  EXPECT_EQ(vec[0].GetNumber(), 1);
+  EXPECT_STREQ(vec[1].GetString().c_str(), "item1");
+  EXPECT_EQ(vec[2].GetType(), Jsoooooon::J_NULL);
+  EXPECT_EQ(vec[3].GetBool(), true);
+  EXPECT_STREQ(vec[4]["str"].GetString().c_str(), "string");
+  EXPECT_STREQ(vec[5].GetList()[0].GetString().c_str(), "temp");
 }
