@@ -1,6 +1,24 @@
-include_directories(${PROJECT_SOURCE_DIR}/include)
-link_directories(${PROJECT_SOURCE_DIR}/lib)
-add_executable(json_test json_test.cpp)
-target_link_libraries(json_test PUBLIC jsoooooon)
-add_executable(parser_test parser_test.cpp)
-target_link_libraries(parser_test PUBLIC jsoooooon)
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+add_executable(
+  test
+  test.cpp
+)
+target_link_libraries(
+  test
+  PUBLIC
+  gtest_main
+  jsoooooon
+)
+
+include(GoogleTest)
+gtest_discover_tests(test)

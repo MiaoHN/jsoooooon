@@ -2,21 +2,9 @@
 
 一个~~低效的~~ json 解析器
 
-## json 文件结构
+## 特点
 
-```
-json       -> { Whitespace objects Whitespace }
-objects    -> objects Whitespace , Whitespace object | object
-object     -> key Whitespace : Whitespace value
-key        -> string
-value      -> list | json | number | string | true | false | null
-string     -> "..."
-number     ->
-list       -> [ Whitespace item Whitespace ]
-item       -> item Whitespace , Whitespace value | value
-Whitespace -> Whitespace whitespace | whitespace
-whitespace -> ' ' | '\t' | '\n'
-```
+- 支持 ECMA-404 标准
 
 ## 示例代码
 
