@@ -22,8 +22,6 @@ class Json {
 
   void DelNode(const std::string& key) { _map.erase(key); }
 
-  // key: value
-  // json[key] = value
   Value& operator[](const std::string& key);
 
   std::string ToString() const;

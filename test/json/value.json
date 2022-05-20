@@ -1,0 +1,10 @@
+{
+  "string": "string",
+  "number": 1,
+  "null": null,
+  "bool": true,
+  "list": ["list1", "list2"],
+  "object": {
+    "object.string": "object.string"
+  }
+}

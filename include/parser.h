@@ -19,21 +19,14 @@ class Parser {
 
  private:
   Json parse();
-
   void skip_whitespace();
-
   std::string parse_string();
-
+  std::string parse_key();
   double parse_number();
-
   Json parse_object();
-
   Value parse_list();
-
   Value parse_value();
-
   bool parse_bool();
-
   void parse_null();
 
  private:

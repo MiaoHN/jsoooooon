@@ -54,8 +54,15 @@ std::string Parser::parse_string() {
   return s.str();
 }
 
+std::string Parser::parse_key() {
+  skip_whitespace();
+  std::string key = parse_string();
+  skip_whitespace();
+  return key;
+}
+
 double Parser::parse_number() {
-  double result = 0.;
+  double result = 0;
   int flag = 1;
   // 符号
   if (_data[curr] == '-') {
@@ -64,55 +71,46 @@ double Parser::parse_number() {
   } else if (_data[curr] == '+') {
     ++curr;
   }
-  if (_data[curr] == 0) {
+
+  while (isdigit(_data[curr])) {
+    double n = _data[curr] - '0';
     ++curr;
-    if (_data[curr] == 'x') {
-      // TODO 16 进制
-    } else if (_data[curr] == 'b') {
-      // TODO 2 进制
-    } else if (_data[curr] == '0') {
-      // TODO 8 进制
-    }
-  } else if (_data[curr] == '.') {
-    // 直接到小数
+    result = n + result * 10.;
+  }
+  if (_data[curr] == '.') {
     curr++;
     double aft = 0.;
     double b = 1.;
     while (isdigit(_data[curr])) {
       b /= 10.;
-      double n = _data[curr++] - '0';
+      double n = _data[curr] - '0';
+      curr++;
       aft += n * b;
     }
     result += aft;
-  } else {
-    // [1~9][0~9]*.[0~9][Ee][+-][1~9][0~9]*
-    while (isdigit(_data[curr])) {
-      double n = _data[curr] - '0';
-      ++curr;
-      result = n + result * 10.;
-    }
-    if (_data[curr] == '.') {
-      curr++;
-      double aft = 0.;
-      double b = 1.;
-      while (isdigit(_data[curr])) {
-        b /= 10.;
-        double n = _data[curr++] - '0';
-        aft += n * b;
-      }
-      result += aft;
-    }
   }
   if (_data[curr] == 'e' || _data[curr] == 'E') {
     curr++;
-    int val = parse_number();
-    bool f = val > 0;
+    int flge = 1;
+    if (_data[curr] == '-') {
+      flge = -1;
+      curr++;
+    } else if (_data[curr] == '+') {
+      curr++;
+    }
+    int val = 0;
+    while (isdigit(_data[curr])) {
+      double n = _data[curr] - '0';
+      ++curr;
+      val = n + val * 10.;
+    }
+    val *= flge;
     val = abs(val);
     double t = 1;
     for (int i = 0; i < val; ++i) {
       t *= 10;
     }
-    if (f) {
+    if (flge > 0) {
       result *= t;
     } else {
       result /= t;
@@ -123,42 +121,23 @@ double Parser::parse_number() {
 }
 
 Json Parser::parse_object() {
-  Json json;
+  // object 内为 key: value 形式的键值对
+  // { key1: value1, key2: value2, ... }
   skip_whitespace();
-  if (_data[curr] != '{') {
-    std::cout << "warn near {" << std::endl;
-    exit(-1);
-  }
-  ++curr;
+  Json json;
+  assert(_data[curr++] == '{');
   while (true) {
-    skip_whitespace();
-    if (_data[curr] != '"') {
-      std::cout << "warn near \"" << std::endl;
-      exit(-1);
-    }
-    std::string key = parse_string();
-    skip_whitespace();
-    if (_data[curr] != ':') {
-      std::cout << "warn near :" << std::endl;
-      exit(-1);
-    }
-    ++curr;
-    skip_whitespace();
+    std::string key = parse_key();
+    assert(_data[curr++] == ':');
     Value value = parse_value();
     json.AddNode(key, value);
     if (_data[curr] != ',') {
       break;
-    } else {
-      ++curr;
     }
+    ++curr;
   }
   skip_whitespace();
-  if (_data[curr] != '}') {
-    std::cout << "warn near }" << std::endl;
-    exit(-1);
-  } else {
-    curr++;
-  }
+  assert(_data[curr++] == '}');
 
   return json;
 }
@@ -191,35 +170,30 @@ Value Parser::parse_list() {
 Value Parser::parse_value() {
   skip_whitespace();
   Value value;
-  // type
   switch (_data[curr]) {
-    // 字符串
-    case '\"': {
+    case '"': {
       value.SetString(parse_string());
       break;
     }
-    // 布尔类型
     case 't':
     case 'f': {
       value.SetBool(parse_bool());
       break;
     }
-    // null 类型
     case 'n': {
       parse_null();
       value.SetNull();
       break;
     }
-    // object
     case '{': {
       value.SetJson(std::make_shared<Json>(parse_object()));
       break;
     }
-    // list
     case '[': {
       value = parse_list();
       break;
     }
+    case '-':
     case '.':
     case '0':
     case '1':
