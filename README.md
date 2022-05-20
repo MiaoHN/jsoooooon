@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
   Jsoooooon::Parser parser;
   Jsoooooon::Json   json = parser.ParseFromFile(filepath);
 
-  std::cout << "result: " << json["result"].ToString() << std::endl;
+  std::cout << "result: " << json["result"].GetNumber() << std::endl;
   return 0;
 }
 ```
@@ -54,15 +54,16 @@ int main(int argc, char** argv) {
 输出：
 
 ```bash
-result: 1.000000
+result: 1
 ```
 
 ## TODO
 
-- [ ] 完善对数字的判断
+- [x] 完善对数字的判断
 - [ ] string 中对特殊编码的支持
 - [ ] json 输出格式化
 - [ ] 通过类似于 map 的操作方式对 json 进行处理
+- [ ] 错误处理
 
 ## 参考
 
